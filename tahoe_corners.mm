@@ -40,6 +40,7 @@ napi_value tahoe_corners(napi_env env, napi_callback_info info) {
   [window setToolbarStyle:NSWindowToolbarStyleUnified];
   window.styleMask |= NSWindowStyleMaskFullSizeContentView;
   [window setTitleVisibility:NSWindowTitleHidden];
+
   NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"toolbar"];
   [toolbar setDisplayMode:NSToolbarDisplayModeIconOnly];
   [toolbar setAllowsUserCustomization:NO];
@@ -47,41 +48,17 @@ napi_value tahoe_corners(napi_env env, napi_callback_info info) {
   if (@available(macOS 15.0, *)) {
     [toolbar setAllowsDisplayModeCustomization:NO];
   }
-
-  // NSView *toolbarView = [toolbar performSelector:@selector(_toolbarView)];
-
-  // NSRect frame = toolbarView.frame;
-  // frame.size.height = 0;
-  // toolbarView.frame = frame;
-
-  // NSRect bounds = toolbarView.bounds;
-  // bounds.size.height = 0;
-  // toolbarView.bounds = bounds;
-
   [window setToolbar: toolbar];
 
-  // [toolbarView setHidden:YES];
-
-  // NSWindowWillEnterFullScreenNotification, NSWindowWillExitFullScreenNotification, and NSWindowDidExitFullScreenNotification
-
   [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillEnterFullScreenNotification object:window queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-    // NSLog(@"NSWindowWillEnterFullScreenNotification");
-    // [window toggleToolbarShown];
-    // [window setToolbar: NULL];
     toolbar.visible = false;
-    // toolbarView.hidden = true;
   }];
 
   [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowWillExitFullScreenNotification object:window queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-    // NSLog(@"NSWindowWillExitFullScreenNotification");
-    // [window toggleToolbarShown];
-    // [window setToolbar: toolbar];
     toolbar.visible = true;
   }];
 
   [[NSNotificationCenter defaultCenter] addObserverForName:NSWindowDidExitFullScreenNotification object:window queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-    // NSLog(@"NSWindowDidExitFullScreenNotification");
-    // [window setToolbar: toolbar];
     toolbar.visible = true;
   }];
 
